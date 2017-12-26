@@ -2,8 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { setFlash } from '../actions/flash';
-import { Card, Container, Header, Image, Dimmer, Loader, Segment } from 'semantic-ui-react';
+import { Button, Card, Container, Header, Image, Dimmer, Loader, Segment } from 'semantic-ui-react';
 
 class Beers extends React.Component {
   state = { beers: [], loading: true, page: 1, hasMore: true }
@@ -54,11 +55,14 @@ class Beers extends React.Component {
     const { beers } = this.state;
     return beers.map( b => {
       return (
-        <Card>
+        <Card key={b.name}>
           <Card.Content>
             <Card.Header>
               {b.name}
             </Card.Header>
+          </Card.Content>
+          <Card.Content extra>
+            <Button color='teal' as={Link} to={`/api/beer/${b.name}`}>More Info</Button>
           </Card.Content>
         </Card>
       );

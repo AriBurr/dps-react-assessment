@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
     # Breweries
     get 'all_breweries', to: 'breweries#all'
-    get 'brewery/:name', to: 'breweries#by_name'
+    get 'brewery/:id', to: 'breweries#by_id'
 
     # Search
     get 'search_all', to: 'brewery_db_search#all'
