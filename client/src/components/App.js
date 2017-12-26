@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 import Flash from './Flash';
 import Home from './Home';
 import Beers from './Beers';
+import Breweries from './Breweries';
 import { Switch, Route } from 'react-router-dom';
 import { Segment } from 'semantic-ui-react';
 
@@ -16,6 +17,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={Home} />
           <Route exact path='/api/all_beers' component={Beers} />
+          <Route exact path='/api/all_breweries' component={Breweries} />
           <Route component={NoMatch} />
         </Switch>
       </Segment>
