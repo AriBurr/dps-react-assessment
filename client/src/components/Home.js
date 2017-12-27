@@ -1,75 +1,73 @@
 import React, { Component } from 'react';
-import { Header, Segment, Divider, Grid, Image } from 'semantic-ui-react';
-import ReactMarkDown from 'react-markdown';
-import axios from 'axios';
-import dpsLogo from '../images/dpsLogo.svg';
+import { Link } from 'react-router-dom';
+import { Button, Card, Container, Grid, Header, Image, Segment } from 'semantic-ui-react';
+import brewery from '../images/brewery.jpg';
+import beer from '../images/beer.jpg';
+import landing from '../images/landing.jpg';
 
-class Home extends Component {
-  state = { assignmentMarkdown: '' };
-
-  componentDidMount() {
-    axios.get('/api/assignment_details')
-      .then(res => {
-        this.setState({ assignmentMarkdown: res.data.file })
-      })
-      .catch( error => {
-        console.log(error.response);
-    });
-  }
-
-  render() {
-    return(
-      <Segment basic>
-        <Segment basic textAlign='center'>
-          <Image style={styles.centered} size='tiny' src={dpsLogo} alt='DevPoint Studios Logo' />
-          <Header as='h1' style={styles.header}>DevPoint Studios React Assessment</Header>
-        </Segment>
-        <Grid>
-          <Grid.Column computer={8} tablet={8} mobile={16}>
-            <Segment inverted>
+const Home = () => {
+  return (
+    <Container>
+      <Segment style={styles.backgroundImage}>
+        <Grid columns={2}>
+          <Grid.Row>
+            <Grid.Column>
               <Header
-                as='h1'
                 textAlign='center'
-                style={styles.header}>
-                  Assessment Details:
+                style={styles.headerText}
+                >
+                Bittr
               </Header>
-              <Divider />
-              <ReactMarkDown source={this.state.assignmentMarkdown} />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column computer={8} tablet={8} mobile={16}>
-            <Segment inverted>
+            </Grid.Column>
+            <Grid.Column>
               <Header
-                as='h1'
                 textAlign='center'
-                style={styles.header}>
-                  Assessment API Endpoints:
+                style={styles.secondaryText}
+                >
+                Discover What's on Tap Tonight.
               </Header>
-              <Divider />
-              <iframe
-                style={styles.iframe}
-                title='Assignment README.md'
-                frameBorder={0}
-                src='http://localhost:3001/rails/info/routes'
-              />
-            </Segment>
-          </Grid.Column>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </Segment>
-    );
-  }
+      <Card.Group stackable itemsPerRow={2}>
+        <Card>
+          <Image src={brewery} />
+          <Card.Content>
+            <Button circular color='black' size='big' fluid as={Link} to={`/api/all_breweries`}>Discover Breweries</Button>
+          </Card.Content>
+        </Card>
+        <Card>
+          <Image src={beer} />
+          <Card.Content>
+            <Button circular color='black' size='big' fluid as={Link} to={`/api/all_beers`}>Discover Brews</Button>
+          </Card.Content>
+        </Card>
+      </Card.Group>
+    </Container>
+  )
 }
 
 const styles = {
-  iframe: {
+  backgroundImage: {
+    background: `linear-gradient( rgba(0, 0, 0, .25), rgba(0, 0, 0, .85) ), url(${landing})`,
+    backgroundSize: 'cover',
+    overflow: 'hidden',
     width: '100%',
-    height: '100vh'
+    height: '75vh'
   },
-  centered: {
-    margin: '0 auto',
+  headerText: {
+    color: 'white',
+    fontFamily: 'helvetica',
+    fontSize: '6em',
+    letterSpacing: '5px',
+    marginTop: '55%',
   },
-  header: {
-    color: '#2ecc40'
+  secondaryText: {
+    color: 'white',
+    fontFamily: 'courier',
+    fontSize: '2em',
+    marginTop: '75%',
   }
 }
 

@@ -10,21 +10,19 @@ class NavBar extends Component {
 
   render() {
     return (
-      <div>
-        <Menu pointing>
-          <Link to='/'>
-            <Menu.Item name='home' active={this.activeItem('/')} />
+      <Menu>
+        <Link to='/'>
+          <Menu.Item name='Bittr' active={this.activeItem('/')} />
+        </Link>
+        <Menu.Menu position='right'>
+          <Link to='/api/all_beers'>
+            <Menu.Item name='Beers' />
           </Link>
-          <Menu.Menu position='right'>
-            <Link to='/api/all_beers'>
-              <Menu.Item name='Beers' />
-            </Link>
-            <Link to='/api/all_breweries'>
-              <Menu.Item name='Breweries' />
-            </Link>
-          </Menu.Menu>
-        </Menu>
-      </div>
+          <Link to='/api/all_breweries'>
+            <Menu.Item name='Breweries' />
+          </Link>
+        </Menu.Menu>
+      </Menu>
     )
   }
 }
