@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { setFlash } from '../actions/flash';
-import { Card, Container, Dimmer, Loader } from 'semantic-ui-react';
+import { Grid, Container, Dimmer, Header, Image, Loader } from 'semantic-ui-react';
 
 import { connect } from 'react-redux';
 
@@ -28,19 +28,29 @@ class Beer extends React.Component {
     );
   }
 
+  renderLabel = (beer) => {
+    return (
+      <Image src={beer.labels.medium} />
+    )
+  }
+
   displayBeer = () => {
     const { beer } = this.state;
     return (
-      <Card>
-        <Card.Content>
-          <Card.Header>
-            { beer.name }
-          </Card.Header>
-        </Card.Content>
-        <Card.Content extra>
-          { beer.description }
-        </Card.Content>
-      </Card>
+      <Grid>
+        <Grid.Column width={4}>
+          {beer.labels ? this.renderLabel(beer) : null }
+        </Grid.Column>
+        <Grid.Column width={9}>
+          <Header>{ beer.name }</Header>
+          <Grid.Row>{ beer.description }</Grid.Row>
+        </Grid.Column>
+        <Grid.Column width={3}>
+          <Grid.Row>{ beer.style.short_name }</Grid.Row>
+          <Grid.Row>ABV: { beer.abv }</Grid.Row>
+          <Grid.Row>Organic: { beer.is_organic }</Grid.Row>
+        </Grid.Column>
+      </Grid>
     );
   }
 

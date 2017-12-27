@@ -1,10 +1,20 @@
 import React from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
+import Truncate from 'react-truncate';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { setFlash } from '../actions/flash';
-import { Button, Card, Container, Header, Image, Dimmer, Loader, Segment } from 'semantic-ui-react';
+import {
+  Button,
+  Card,
+  Container,
+  Dimmer,
+  Header,
+  Item,
+  Loader,
+  Segment,
+ } from 'semantic-ui-react';
 
 class Beers extends React.Component {
   state = { beers: [], loading: true, page: 1, hasMore: true }
@@ -23,6 +33,7 @@ class Beers extends React.Component {
     axios.get(`/api/all_beers?page=${page}&per_page=30`)
     .then( res => {
       const { data } = res;
+      console.log(data);
       if(data.total_pages) {
         if (data.total_pages === page)
           this.setState({ hasMore: false});
@@ -53,16 +64,18 @@ class Beers extends React.Component {
 
   displayBeers = () => {
     const { beers } = this.state;
-    return beers.map( b => {
+    return beers.map( beer => {
       return (
-        <Card key={b.name}>
+        <Card key={beer.name}>
           <Card.Content>
-            <Card.Header>
-              {b.name}
-            </Card.Header>
-          </Card.Content>
-          <Card.Content extra>
-            <Button color='teal' as={Link} to={`/api/beer/${b.name}`}>More Info</Button>
+            <Card.Header>{ beer.name }</Card.Header>
+            <Card.Meta>{ beer.style.short_name }</Card.Meta>
+            <Card.Meta> ABV: { beer.abv }</Card.Meta>
+            <Card.Description>
+              <Truncate lines={1} ellipsis={<span>... <Link to={`/api/beer/${beer.name}`}>Read More</Link></span>}>
+                { beer.description }
+              </Truncate>
+            </Card.Description>
           </Card.Content>
         </Card>
       );
@@ -88,7 +101,7 @@ class Beers extends React.Component {
             hasMore={hasMore}
             useWindow={false}
           >
-            <Card.Group stackable itemsPerRow={3}>
+            <Card.Group stackable itemsPerRow={2}>
               { this.displayBeers() }
             </Card.Group>
           </InfiniteScroll>

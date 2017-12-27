@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { setFlash } from '../actions/flash';
-import { Card, Container, Dimmer, Loader } from 'semantic-ui-react';
+import { Container, Dimmer, Grid, Header, Image, Loader } from 'semantic-ui-react';
 
 import { connect } from 'react-redux';
 
@@ -29,22 +29,28 @@ class Brewery extends React.Component {
     );
   }
 
+  renderImage = (brewery) => {
+    return (
+      <Image src={brewery.images.medium} />
+    )
+  }
+
   displayBrewery = () => {
     const { brewery } = this.state;
     return (
-      <Card>
-        <Card.Content>
-          <Card.Header>
-            { brewery.name }
-          </Card.Header>
-          <Card.Meta>
-            Est: { brewery.established }
-          </Card.Meta>
-        </Card.Content>
-        <Card.Content extra>
-          { brewery.description }
-        </Card.Content>
-      </Card>
+      <Grid>
+        <Grid.Column width={4}>
+          {brewery.images ? this.renderImage(brewery) : null }
+        </Grid.Column>
+        <Grid.Column width={9}>
+          <Header>{ brewery.name }</Header>
+          <Grid.Row>{ brewery.description }</Grid.Row>
+        </Grid.Column>
+        <Grid.Column width={3}>
+          <Grid.Row>Est. { brewery.established }</Grid.Row>
+          <Grid.Row>{ brewery.website }</Grid.Row>
+        </Grid.Column>
+      </Grid>
     );
   }
 

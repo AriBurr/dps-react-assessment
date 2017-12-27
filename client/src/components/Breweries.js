@@ -1,10 +1,21 @@
 import React from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
+import Truncate from 'react-truncate';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { setFlash } from '../actions/flash';
-import { Button, Card, Container, Header, Image, Dimmer, Loader, Segment } from 'semantic-ui-react';
+import {
+  Button,
+  Card,
+  Container,
+  Dimmer,
+  Header,
+  Image,
+  Item,
+  Loader,
+  Segment,
+ } from 'semantic-ui-react';
 
 class Breweries extends React.Component {
   state = { breweries: [], loading: true, page: 1, hasMore: true }
@@ -23,6 +34,7 @@ class Breweries extends React.Component {
     axios.get(`/api/all_breweries?page=${page}&per_page=30`)
     .then( res => {
       const { data } = res;
+      console.log(data);
       if(data.total_pages) {
         if (data.total_pages === page)
           this.setState({ hasMore: false});
@@ -51,18 +63,31 @@ class Breweries extends React.Component {
     this.fetchBreweries(this.props, this.state.page + 1)
   }
 
+  renderDesc = (brewery) => {
+    return (
+      <Truncate lines={1} ellipsis={<span>... <Link to={`/api/brewery/${brewery.id}`}>Read More</Link></span>}>
+        { brewery.description }
+      </Truncate>
+    )
+  }
+
+  renderImage = (brewery) => {
+    return (
+      <Image src={brewery.images.icon} />
+    )
+  }
+
   displayBreweries = () => {
     const { breweries } = this.state;
-    return breweries.map( b => {
+    return breweries.map( brewery => {
       return (
-        <Card key={b.id}>
+        <Card key={brewery.name}>
           <Card.Content>
-            <Card.Header>
-              {b.name}
-            </Card.Header>
-          </Card.Content>
-          <Card.Content extra>
-            <Button color='teal' as={Link} to={`/api/brewery/${b.id}`}>More Info</Button>
+            {brewery.images ? this.renderImage(brewery) : null }
+            <Card.Header>{ brewery.name }</Card.Header>
+            <Card.Description>
+              { brewery.description ? this.renderDesc(brewery) : <Link to={`/api/brewery/${brewery.id}`}>Read More</Link> }
+            </Card.Description>
           </Card.Content>
         </Card>
       );
@@ -88,7 +113,7 @@ class Breweries extends React.Component {
             hasMore={hasMore}
             useWindow={false}
           >
-            <Card.Group stackable itemsPerRow={3}>
+            <Card.Group stackable itemsPerRow={2}>
               { this.displayBreweries() }
             </Card.Group>
           </InfiniteScroll>
