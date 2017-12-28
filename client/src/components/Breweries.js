@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import SearchBar from './SearchBar';
 import InfiniteScroll from 'react-infinite-scroller';
 import Truncate from 'react-truncate';
 import { connect } from 'react-redux';
@@ -49,6 +50,14 @@ class Breweries extends React.Component {
     .then( () => {
       this.setState({ loading: false });
     });
+  }
+
+  breweriesSearch = (term) => {
+    const { dispatch } = this.props;
+    axios.get(`/api/search_breweries?query=${term}`)
+      .then( res => {
+        this.setState({ breweries: res.data.entries })
+      });
   }
 
   loadingMessage = () => {
@@ -106,6 +115,7 @@ class Breweries extends React.Component {
       return (
         <Container>
           <Header as='h1' textAlign='center' block>Breweries</Header>
+          <SearchBar onSearchTermChange={this.breweriesSearch} />
           <Segment style={{ height: '100vh', overflowY: 'scroll', overflowX: 'hidden' }}>
           <InfiniteScroll
             pageStart={page}

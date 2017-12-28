@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import SearchBar from './SearchBar';
 import InfiniteScroll from 'react-infinite-scroller';
 import Truncate from 'react-truncate';
 import { connect } from 'react-redux';
@@ -50,6 +51,14 @@ class Beers extends React.Component {
     });
   }
 
+  beerSearch = (term) => {
+    const { dispatch } = this.props;
+    axios.get(`/api/search_beers?query=${term}`)
+      .then( res => {
+        this.setState({ beers: res.data.entries })
+      });
+  }
+
   loadingMessage = () => {
     return (
       <Dimmer active style={{ height: '100vh' }}>
@@ -69,7 +78,6 @@ class Beers extends React.Component {
         <Card key={beer.name}>
           <Card.Content>
             <Card.Header>{ beer.name }</Card.Header>
-            <Card.Meta>{ beer.style.short_name }</Card.Meta>
             <Card.Meta> ABV: { beer.abv }</Card.Meta>
             <Card.Description>
               <Truncate lines={1} ellipsis={<span>... <Link to={`/api/beer/${beer.name}`}>Read More</Link></span>}>
@@ -94,6 +102,7 @@ class Beers extends React.Component {
       return (
         <Container>
           <Header as='h1' textAlign='center' block>Beers</Header>
+          <SearchBar onSearchTermChange={this.beerSearch} />
           <Segment style={{ height: '100vh', overflowY: 'scroll', overflowX: 'hidden' }}>
           <InfiniteScroll
             pageStart={page}
